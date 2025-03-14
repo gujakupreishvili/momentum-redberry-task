@@ -7,3 +7,21 @@
   --font-mono: var(--font-geist-mono);
   --font-firago: var(--font-firago4);
 }
+.scrollable {
+  scrollbar-width: thin; /* Firefox-ისთვის */
+  scrollbar-color: #8338EC #f0f0f0; /* Firefox-ისთვის */
+}
+
+.scrollable::-webkit-scrollbar {
+  width: 8px; /* WebKit-ისთვის (Chrome, Safari) */
+}
+
+.scrollable::-webkit-scrollbar-thumb {
+  background-color: #8338EC; /* სქროლის ზოლის ფერი */
+  border-radius: 4px;
+}
+
+.scrollable::-webkit-scrollbar-track {
+  background-color: #f0f0f0; /* სქროლის ფონის ფერი */
+  border-radius: 4px;
+}
