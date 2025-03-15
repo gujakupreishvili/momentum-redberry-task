@@ -19,6 +19,10 @@ interface FilterModalProps {
   selectedFilter: FilterTypes;
   setSelectedFilter: (item: FilterItem, filterType: keyof FilterTypes) => void;
   filterType: keyof FilterTypes;
+  width?: string;
+  height?: string;
+  itemsheight?:string
+  showButton?: boolean;
 }
 
 export default function FilterModal({
@@ -26,6 +30,10 @@ export default function FilterModal({
   selectedFilter,
   setSelectedFilter,
   filterType,
+  width = "",
+  height = "",
+  itemsheight = "",
+  showButton = true,
 }: FilterModalProps) {
   const [data, setData] = useState<FilterItem[] | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -51,6 +59,9 @@ export default function FilterModal({
 
   const handleDepartmentSelect = (item: FilterItem) => {
     setSelectedFilter(item, filterType);
+    if (!showButton) {
+      onClose();
+    }
   };
 
   const handleCloseModal = () => {
@@ -70,17 +81,18 @@ export default function FilterModal({
   }
 
   return (
-    <div className="w-[688px] h-[274px] border-[1px] border-[#8338EC] rounded-[10px] absolute bg-white mt-[11px] px-[30px] pt-[40px] z-30">
+    <div
+      style={{ width, height }}
+      className="border-[1px] border-[#8338EC] rounded-[10px] absolute bg-white mt-[11px] px-[30px] pt-[40px] z-30"
+    >
       <div
-        className={`max-h-[220px] overflow-y-auto ${
+      style={{maxHeight: itemsheight}}
+        className={`overflow-y-auto ${
           data && data.length > 5 ? "scrollable" : ""
         }`}
       >
         {data?.map((item) => (
-          <div
-            key={item.id}
-            className="flex items-center gap-[15px] mb-[22px]"
-          >
+          <div key={item.id} className="flex items-center gap-[15px] mb-[22px]">
             <label
               className={`${
                 filterType === "priorities"
@@ -91,7 +103,9 @@ export default function FilterModal({
               <input
                 type="checkbox"
                 className="peer hidden"
-                checked={selectedFilter[filterType].some((selected) => selected.id === item.id)}
+                checked={selectedFilter[filterType].some(
+                  (selected) => selected.id === item.id
+                )}
                 onChange={() => handleDepartmentSelect(item)}
               />
               <svg
@@ -122,12 +136,14 @@ export default function FilterModal({
           </div>
         ))}
       </div>
-      <button
-        className="absolute right-[30px] bottom-[20px] w-[155px] h-[35px] rounded-[20px] bg-[#8338EC] text-white font-firago text-[16px] z-40"
-        onClick={handleCloseModal}
-      >
-        არჩევა
-      </button>
+      {showButton && ( 
+        <button
+          className="absolute right-[30px] bottom-[20px] w-[155px] h-[35px] rounded-[20px] bg-[#8338EC] text-white font-firago text-[16px] z-40"
+          onClick={handleCloseModal}
+        >
+          არჩევა
+        </button>
+      )}
     </div>
   );
 }
