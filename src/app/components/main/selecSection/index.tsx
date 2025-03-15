@@ -22,7 +22,7 @@ export default function SelecSection() {
     employees: [],
   });
 
-  console.log(selectedFilter);
+  // console.log(selectedFilter);
 
   return (
     <div className="relative">
@@ -95,6 +95,9 @@ export default function SelecSection() {
           }
           onClose={() => setIsShown(0)}
           filterType="departments"
+          width= "688px" 
+          height= "274px" 
+          itemsheight ="220px"
         />
       )}
       {isShown === 2 && (
@@ -110,6 +113,9 @@ export default function SelecSection() {
           }
           onClose={() => setIsShown(0)}
           filterType="priorities"
+          width= "688px" 
+          height= "274px" 
+          itemsheight ="220px"
         />
       )}
       {isShown === 3 && (
@@ -125,6 +131,9 @@ export default function SelecSection() {
           }
           onClose={() => setIsShown(0)}
           filterType="employees"
+          width= "688px" 
+          height= "274px"
+          itemsheight ="220px" 
         />
       )}
     </div>
