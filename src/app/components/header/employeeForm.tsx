@@ -80,8 +80,7 @@ export default function EmployeeForm({ setShowAddEmployee }: AddemployeeProps) {
     errors,
     setFieldValue,
   } = formik;
-  console.log(formik.values, "values");
-  console.log(formik.errors, "errors")
+  
   return (
     <form action="" className="w-full" onSubmit={handleSubmit}>
       <div className="flex w-full justify-between ">
@@ -207,7 +206,7 @@ export default function EmployeeForm({ setShowAddEmployee }: AddemployeeProps) {
         </div>
       </div>
       <Avatar
-        onChange={(file) => setFieldValue("avatar", file)} 
+        onChange={(file) => setFieldValue("avatar", file)}
         error={errors.avatar}
       />
       <div className="mt-[45px] w-full relative">
@@ -222,26 +221,33 @@ export default function EmployeeForm({ setShowAddEmployee }: AddemployeeProps) {
           <IoIosArrowDown className={`${isShown === 1 && "rotate-180"} ${errors.department_id ? "text-red-500" : "text-[#343A40]"}`} />
         </div>
         {isShown === 1 && (
-          <FilterModal
-            selectedFilter={selectedFilter}
-            setSelectedFilter={(item: FilterItem) => {
-              setSelectedFilter((prev) => ({
-                ...prev,
-                departments: prev.departments.some(
-                  (selected) => selected.id === item.id
-                )
-                  ? []
-                  : [item],
-              }));
-            setFieldValue("department_id", item.id.toString());
-            }}
-            onClose={() => setIsShown(0)}
-            filterType="departments"
-            width="384px"
-            height="150px"
-            showButton={false}
-            itemsheight="100px"
-          />
+        <FilterModal
+        selectedFilter={selectedFilter}
+        setSelectedFilter={(item: FilterItem) => {
+          const newDepartments = selectedFilter.departments.some(
+            (selected) => selected.id === item.id
+          )
+            ? [] 
+            : [item];
+      
+          setSelectedFilter((prev) => ({
+            ...prev,
+            departments: newDepartments,
+          }));
+
+          if (newDepartments.length === 0) {
+            setFieldValue("department_id", ""); 
+          } else {
+            setFieldValue("department_id", item.id); 
+          }
+        }}
+        onClose={() => setIsShown(0)}
+        filterType="departments"
+        width="384px"
+        height="150px"
+        showButton={false}
+        itemsheight="100px"
+      />
         )}
       </div>
       <div className="w-full mt-[65px] flex items-center gap-[22px] justify-end">
@@ -251,7 +257,7 @@ export default function EmployeeForm({ setShowAddEmployee }: AddemployeeProps) {
         >
           გაუქმება
         </button>
-        <button className="w-[263px] h-[42px] bg-[#8338EC] rounded-[5px] text-[18px] text-white font-firago font-normal">
+        <button type="button" className="w-[263px] h-[42px] bg-[#8338EC] rounded-[5px] text-[18px] text-white font-firago font-normal cursor-pointer">
           დაამატე თანამშრომელი
         </button>
       </div>
