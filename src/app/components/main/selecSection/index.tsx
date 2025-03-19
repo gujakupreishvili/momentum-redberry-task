@@ -1,11 +1,14 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { IoIosArrowDown } from "react-icons/io";
 import FilterModal from "./departmentModal/filterModal";
+import { IoClose } from "react-icons/io5";
+import { usePathname } from "next/navigation";
 
 type FilterItem = {
   id: number;
   name: string;
+  surname?: string;
 };
 
 type FilterTypes = {
@@ -22,7 +25,36 @@ export default function SelecSection() {
     employees: [],
   });
 
-  // console.log(selectedFilter);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    const savedFilters = sessionStorage.getItem("selectedFilters");
+    if (savedFilters) {
+      setSelectedFilter(JSON.parse(savedFilters));
+    }
+  }, []);
+
+
+  //როუტზე გადასვლისას რო წაიშალოს 
+  useEffect(() => {
+    if (pathname !== "/") {
+      sessionStorage.removeItem("selectedFilters");
+      setSelectedFilter({
+        departments: [],
+        priorities: [],
+        employees: [],
+      });
+    }
+  }, [pathname]);
+  //წაშლაა 
+  const handleRemoveFilter = (item: FilterItem, filterType: keyof FilterTypes) => {
+  setSelectedFilter((prev) => ({
+    ...prev,
+    [filterType]: prev[filterType].filter((selected) => selected.id !== item.id),
+  }));
+};
+
+
 
   return (
     <div className="relative">
@@ -65,7 +97,7 @@ export default function SelecSection() {
           />
         </div>
         <div
-          className="flex items-center gap-[8px] w-[200px]"
+          className="flex items-center gap-[8px] w-[200px] cursor-pointer"
           onClick={() => (isShown !== 3 ? setIsShown(3) : setIsShown(0))}
         >
           <p
@@ -82,6 +114,51 @@ export default function SelecSection() {
           />
         </div>
       </div>
+      {/* მოჩექილების გამოჩენა  */}
+      {(selectedFilter.departments.length > 0 ||
+        selectedFilter.employees.length > 0 ||
+        selectedFilter.priorities.length > 0) && (
+        <div className="flex flex-wrap gap-[8px] mt-[31px] items-center">
+          {selectedFilter.departments.map((item) => (
+            <div
+              key={item.id}
+              className="flex items-center gap-[8px] border-[1px] border-[#CED4DA] rounded-[43px] px-[10px] py-[6px]"
+            >
+              <p className="text-[#343A40] text-[14px] font-firago font-normal">{item.name}</p>
+              <IoClose
+                onClick={() => handleRemoveFilter(item, "departments")}
+                className="text-[#343A40] cursor-pointer"
+              />
+            </div>
+          ))}
+          {selectedFilter.priorities.map((item) => (
+            <div
+              key={item.id}
+              className="flex items-center gap-[8px] border-[1px] border-[#CED4DA] rounded-[43px] px-[10px] py-[6px]"
+            >
+              <p className="text-[#343A40] text-[14px] font-firago font-normal">{item.name}</p>
+              <IoClose
+                onClick={() => handleRemoveFilter(item, "priorities")}
+                className="text-[#343A40] cursor-pointer"
+              />
+            </div>
+          ))}
+          {selectedFilter.employees.map((item) => (
+            <div
+              key={item.id}
+              className="flex items-center gap-[8px] border-[1px] border-[#CED4DA] rounded-[43px] px-[10px] py-[6px]"
+            >
+              <p className="text-[#343A40] text-[14px] font-firago font-normal">
+                {item.name} {item.surname}
+              </p>
+              <IoClose
+                onClick={() => handleRemoveFilter(item, "employees")}
+                className="text-[#343A40] cursor-pointer"
+              />
+            </div>
+          ))}
+        </div>
+      )}
       {isShown === 1 && (
         <FilterModal
           selectedFilter={selectedFilter}
@@ -93,11 +170,14 @@ export default function SelecSection() {
                 : [...prev.departments, item],
             }))
           }
-          onClose={() => setIsShown(0)}
+          onClose={() => {
+            sessionStorage.setItem("selectedFilters", JSON.stringify(selectedFilter));
+            setIsShown(0);
+          }}
           filterType="departments"
-          width= "688px" 
-          height= "274px" 
-          itemsheight ="220px"
+          width="688px"
+          height="274px"
+          itemsheight="220px"
         />
       )}
       {isShown === 2 && (
@@ -111,11 +191,14 @@ export default function SelecSection() {
                 : [...prev.priorities, item],
             }))
           }
-          onClose={() => setIsShown(0)}
+          onClose={() => {
+            sessionStorage.setItem("selectedFilters", JSON.stringify(selectedFilter));
+            setIsShown(0);
+          }}
           filterType="priorities"
-          width= "688px" 
-          height= "274px" 
-          itemsheight ="220px"
+          width="688px"
+          height="274px"
+          itemsheight="220px"
         />
       )}
       {isShown === 3 && (
@@ -125,15 +208,18 @@ export default function SelecSection() {
             setSelectedFilter((prev) => ({
               ...prev,
               employees: prev.employees.some((selected) => selected.id === item.id)
-                ? prev.employees.filter((selected) => selected.id !== item.id)
-                : [...prev.employees, item],
+                ? []
+                : [item],
             }))
           }
-          onClose={() => setIsShown(0)}
+          onClose={() => {
+            sessionStorage.setItem("selectedFilters", JSON.stringify(selectedFilter));
+            setIsShown(0);
+          }}
           filterType="employees"
-          width= "688px" 
-          height= "274px"
-          itemsheight ="220px" 
+          width="688px"
+          height="274px"
+          itemsheight="220px"
         />
       )}
     </div>
