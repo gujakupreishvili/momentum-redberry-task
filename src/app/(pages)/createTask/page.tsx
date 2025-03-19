@@ -1,4 +1,5 @@
 "use client";
+import { useRouter } from "next/navigation";
 import Header from "@/app/components/header";
 import { CreateTaskValidationSchema } from "@/app/utils/validation/createTaskValidationSchema";
 import { useFormik } from "formik";
@@ -26,6 +27,7 @@ const initialValues = {
 };
 
 export default function Page() {
+  const router = useRouter();
   const [showAddEmployeeModal, setShowAddEmployeeModal] = useState(false);
 
   const formik = useFormik({
@@ -62,6 +64,8 @@ export default function Page() {
         localStorage.removeItem("status");
         localStorage.removeItem("priority");
         localStorage.removeItem("employee");
+
+        router.push("/");
       } catch (error) {
         console.error("Error creating task:", error);
       }
@@ -79,8 +83,8 @@ export default function Page() {
     setFieldTouched,
   } = formik;
 
-  console.log(Object.keys(formik.errors).length, "fotmik erros");
-  console.log(errors, "errros");
+  const hasErrors = Object.keys(errors).length > 0 || Object.keys(touched).length === 0;
+
   return (
     <>
       <Header />
@@ -143,11 +147,9 @@ export default function Page() {
           <div className="flex justify-end">
             <button
               type="submit"
-              disabled={Object.keys(formik.errors).length > 0}
+              disabled={hasErrors}
               className={`w-[208px] h-[42px] bg-[#8338EC] rounded-[5px] text-[18px] font-firago font-normal text-white mt-[145px] ${
-                Object.keys(formik.errors).length > 0
-                  ? "opacity-50 cursor-not-allowed"
-                  : ""
+                hasErrors ? "opacity-50 cursor-not-allowed" : ""
               }`}
             >
               დავალების შექმნა
