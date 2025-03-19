@@ -2,10 +2,13 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import DotLoader from "react-spinners/DotLoader";
+import Image from "next/image";
 
 type FilterItem = {
   id: number;
   name: string;
+  avatar?: string;
+  surname?: string;
 };
 
 type FilterTypes = {
@@ -21,9 +24,11 @@ interface FilterModalProps {
   filterType: keyof FilterTypes;
   width?: string;
   height?: string;
-  itemsheight?:string
+  itemsheight?: string;
   showButton?: boolean;
 }
+
+const token = process.env.NEXT_PUBLIC_API_TOKEN;
 
 export default function FilterModal({
   onClose,
@@ -42,7 +47,14 @@ export default function FilterModal({
     setIsLoading(true);
     try {
       const res = await axios.get(
-        `https://momentum.redberryinternship.ge/api/${filterType}`
+        `https://momentum.redberryinternship.ge/api/${filterType}`,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       setData(res.data);
     } catch (error) {
@@ -58,17 +70,19 @@ export default function FilterModal({
   }, [filterType]);
 
   const handleDepartmentSelect = (item: FilterItem) => {
-    setSelectedFilter(item, filterType);
+    setSelectedFilter(item, filterType); 
     if (!showButton) {
       onClose();
     }
   };
-
+  
   const handleCloseModal = () => {
     if (selectedFilter[filterType].length === 0) {
       alert("გთხოვთ, აირჩიოთ მინიმუმ ერთი ელემენტი!");
       return;
     }
+    // შენახვა sessionStorage-ში ბათონზე  დაჭერისას
+    sessionStorage.setItem("selectedFilters", JSON.stringify(selectedFilter));
     onClose();
   };
 
@@ -86,7 +100,7 @@ export default function FilterModal({
       className="border-[1px] border-[#8338EC] rounded-[10px] absolute bg-white mt-[11px] px-[30px] pt-[40px] z-30"
     >
       <div
-      style={{maxHeight: itemsheight}}
+        style={{ maxHeight: itemsheight }}
         className={`overflow-y-auto ${
           data && data.length > 5 ? "scrollable" : ""
         }`}
@@ -95,7 +109,7 @@ export default function FilterModal({
           <div key={item.id} className="flex items-center gap-[15px] mb-[22px]">
             <label
               className={`${
-                filterType === "priorities"
+                filterType === "priorities" || filterType === "employees"
                   ? "border-[#8338EC]"
                   : "border-[#212529]"
               } relative flex items-center justify-center w-5 h-5 border-2 rounded-md cursor-pointer`}
@@ -110,7 +124,7 @@ export default function FilterModal({
               />
               <svg
                 className={`${
-                  filterType === "priorities"
+                  filterType === "priorities" || filterType === "employees"
                     ? "text-[#8338EC]"
                     : "text-[#212529]"
                 } opacity-0 peer-checked:opacity-100 transition-opacity duration-200`}
@@ -130,13 +144,35 @@ export default function FilterModal({
               </svg>
             </label>
 
-            <p className="text-[16px] font-firago font-normal text-[#212529]">
-              {item.name}
-            </p>
+            {filterType === "employees" && (
+              <div className="flex items-center ">
+                {item.avatar && (
+                  <Image
+                    width={28}
+                    height={28}
+                    src={item.avatar}
+                    alt="avatar"
+                    className="rounded-[16px] w-[28px] h-[28px] object-cover"
+                  />
+                )}
+                <p className="text-[16px] text-[#212529] font-firago font-normal ml-[10px] mr-[3px]">
+                  {item.name}
+                </p>
+                <p className="text-[16px] text-[#212529] font-firago font-normal">
+                  {item.surname}
+                </p>
+              </div>
+            )}
+
+            {filterType !== "employees" && (
+              <p className="text-[16px] font-firago font-normal text-[#212529]">
+                {item.name}
+              </p>
+            )}
           </div>
         ))}
       </div>
-      {showButton && ( 
+      {showButton && (
         <button
           className="absolute right-[30px] bottom-[20px] w-[155px] h-[35px] rounded-[20px] bg-[#8338EC] text-white font-firago text-[16px] z-40"
           onClick={handleCloseModal}

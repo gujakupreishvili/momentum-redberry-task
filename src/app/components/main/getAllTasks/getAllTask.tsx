@@ -31,7 +31,7 @@ type TasksProps = {
 
 type GetAllTaskProps = {
   task: TasksProps;
-  title: { name: string }; // Title type, containing a name field
+  title: { name: string };
 };
 
 export default function GetAllTask({ task, title }: GetAllTaskProps) {
@@ -54,7 +54,6 @@ export default function GetAllTask({ task, title }: GetAllTaskProps) {
 
   const borderColor = statusColors[title.name];
 
-  // თარიღის ფორმატირება
   const formattedDate = new Date(task.due_date).toLocaleDateString("ka-GE", {
     day: "2-digit",
     month: "short",
@@ -68,7 +67,7 @@ export default function GetAllTask({ task, title }: GetAllTaskProps) {
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-[10px]">
-          {/* პრიორიტეტის ბლოკი */}
+ 
           <div
             className={`flex border-[0.5px] rounded-[5px] items-center gap-[8px] px-[4px] py-[4px] ${
               task.priority.name === "მაღალი"

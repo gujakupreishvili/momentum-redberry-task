@@ -8,7 +8,7 @@ const statusColors: Record<string, string> = {
 };
 
 const Statuses = ({ title }: { title: string }) => {
-  const bgColor = statusColors[title] || "bg-gray-500"; // default color if not matched
+  const bgColor = statusColors[title] || "bg-gray-500";
 
   return (
     <div className={`w-[381px] h-[54px] rounded-[10px] flex items-center   justify-center text-white tetx-[20px] font-firago font-medium ${bgColor}`}>

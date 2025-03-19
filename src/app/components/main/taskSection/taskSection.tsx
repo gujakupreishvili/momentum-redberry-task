@@ -36,12 +36,29 @@ type TasksProps = {
   };
 };
 
+// type FilterTypes = {
+//   departments: { id: number; name: string }[];
+//   priorities: { id: number; name: string }[];
+//   employees: { id: number; name: string; surname?: string }[];
+// };
 
 const token = process.env.NEXT_PUBLIC_API_TOKEN;
 
 export default function TaskSection() {
   const [data, setData] = useState<StatusesItem[] | null>(null);
   const [taskData, setTaskData] = useState<TasksProps[] | null>(null);
+  // const [filters, setFilters] = useState<FilterTypes>({
+  //   departments: [],
+  //   priorities: [],
+  //   employees: [],
+  // });
+
+
+// const savedFilters = sessionStorage.getItem("selectedFilters");
+// console.log(sessionStorage.getItem("selectedFilters"))
+
+
+
 
   const getStatuses = async () => {
     try {
@@ -76,7 +93,7 @@ export default function TaskSection() {
     getStatuses();
     getTask();
   }, []);
-  console.log(taskData,"task data")
+  // console.log(taskData,"task data")
 
   return (
     <div className="flex flex-col mt-[79px]">
@@ -90,13 +107,13 @@ export default function TaskSection() {
     <div key={item.id} className="flex flex-col gap-[30px]">
       {taskData
         ?.filter((task) => task.status.name === item.name)
+              // .filter(() => "")
         .map((res) => (
           <GetAllTask key={res.id} task={res} title={item} />
         ))}
     </div>
   ))}
 </div>
-
     </div>
   );
 }
