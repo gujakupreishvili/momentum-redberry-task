@@ -23,22 +23,20 @@ export default function Status({ setFieldValue, error }: StatusProps) {
     if (savedStatus) {
       const parsedStatus = JSON.parse(savedStatus);
       setSelectedStatus(parsedStatus);
-      setFieldValue("status_id", parsedStatus.id);
     } else {
-
       const defaultStatus = data.find((item) => item.name === "დასაწყები");
       if (defaultStatus) {
         setSelectedStatus(defaultStatus);
-        setFieldValue("status_id", defaultStatus.id);
       }
     }
-  }, [data]); 
+  }, [data]);
 
   useEffect(() => {
     if (selectedStatus) {
+      setFieldValue("status_id", selectedStatus.id); // Set Formik value here
       localStorage.setItem("status", JSON.stringify(selectedStatus));
     }
-  }, [selectedStatus]);
+  }, [selectedStatus, setFieldValue]);
 
   const getStatus = async () => {
     try {

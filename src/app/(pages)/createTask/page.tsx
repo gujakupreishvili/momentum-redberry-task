@@ -84,6 +84,7 @@ export default function Page() {
   } = formik;
 
   const hasErrors = Object.keys(errors).length > 0 || Object.keys(touched).length === 0;
+  console.log(values.status_id,"status id")
 
   return (
     <>
