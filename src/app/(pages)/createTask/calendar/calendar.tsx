@@ -44,7 +44,7 @@ export default function Calendar({
   };
 
   return (
-    <div className="w-full flex flex-col">
+    <div className="w-full flex flex-col ">
       <label
         htmlFor="due_date"
         className="text-[#343A40] text-[16px] font-firago font-normal pb-[6px]"
@@ -58,7 +58,7 @@ export default function Calendar({
         onChange={handleDateChange}
         min={formattedDate}
         className={`h-[45px] w-[318px] border-[1px] rounded-[5px] ${
-          error && touched ? "border-red-500" : "border-[#DEE2E6]"
+          error && touched ? "border-red-500" : "border-[#DEE2E6] px-[15px]"
         }`}
       />
       {error && touched && (

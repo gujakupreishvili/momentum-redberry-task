@@ -12,7 +12,9 @@ export default function Header() {
   return (
     <>
     <div className='flex justify-between items-center px-[6.3%] py-[31px] w-full'>
+      <Link href = "/">
       <Image src={logo} alt='logo'/>
+      </Link>
       <div className='flex items-center gap-[40px]'>
         <button className='w-[225px] cursor-pointer h-[39px] rounded-[5px] text-[16px] font-firago font-normal text-[#212529] border-[1px] border-[#8338EC]' onClick={() => setShowAddEmployee(true)}>თანამშრომლის შექმნა</button>
         <Link href="/createTask" >
