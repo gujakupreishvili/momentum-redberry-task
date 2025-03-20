@@ -5,7 +5,8 @@ import { IoIosArrowDown } from "react-icons/io";
 import FilterModal from "../main/selecSection/departmentModal/filterModal";
 import { useFormik } from "formik";
 import { EmployeeValidationSchema } from "@/app/utils/validation/employeeValidationSchema";
-import axios from "axios";
+import { axiosInstance } from "@/app/lib/axiosInstance";
+
 
 interface AddemployeeProps {
   setShowAddEmployee: (value: boolean) => void;
@@ -53,17 +54,11 @@ export default function EmployeeForm({ setShowAddEmployee }: AddemployeeProps) {
           formData.append("avatar", values.avatar);
         }
 
-        const res = await axios.post(
-          "https://momentum.redberryinternship.ge/api/employees",
-          formData,
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const res = await axiosInstance.post("employees", formData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         console.log("Employee created:", res.data);
       } catch (error) {
         console.error("Error creating employee:", error);
@@ -80,6 +75,7 @@ export default function EmployeeForm({ setShowAddEmployee }: AddemployeeProps) {
     errors,
     setFieldValue,
   } = formik;
+  const hasErrors = Object.keys(errors).length;
   
   return (
     <form action="" className="w-full" onSubmit={handleSubmit}>
@@ -89,7 +85,6 @@ export default function EmployeeForm({ setShowAddEmployee }: AddemployeeProps) {
             htmlFor=""
             className="text-[14px] text-[#343A40] font-medium font-firago pb-[3px]"
           >
-            {" "}
             სახელი*
           </label>
           <input
@@ -214,40 +209,46 @@ export default function EmployeeForm({ setShowAddEmployee }: AddemployeeProps) {
           დეპარტამენტი*
         </p>
         <div
-          className={`${errors.department_id ? "border-red-500" : "border-[#CED4DA] "} w-[384px] h-[42px] border-[1px]  rounded-[6px] flex items-center justify-between px-[14px] cursor-pointer`}
+          className={`${
+            errors.department_id ? "border-red-500" : "border-[#CED4DA] "
+          } w-[384px] h-[42px] border-[1px]  rounded-[6px] flex items-center justify-between px-[14px] cursor-pointer`}
           onClick={handleIsShow}
         >
           <p>{selectedFilter.departments[0]?.name}</p>
-          <IoIosArrowDown className={`${isShown === 1 && "rotate-180"} ${errors.department_id ? "text-red-500" : "text-[#343A40]"}`} />
+          <IoIosArrowDown
+            className={`${isShown === 1 && "rotate-180"} ${
+              errors.department_id ? "text-red-500" : "text-[#343A40]"
+            }`}
+          />
         </div>
         {isShown === 1 && (
-        <FilterModal
-        selectedFilter={selectedFilter}
-        setSelectedFilter={(item: FilterItem) => {
-          const newDepartments = selectedFilter.departments.some(
-            (selected) => selected.id === item.id
-          )
-            ? [] 
-            : [item];
-      
-          setSelectedFilter((prev) => ({
-            ...prev,
-            departments: newDepartments,
-          }));
+          <FilterModal
+            selectedFilter={selectedFilter}
+            setSelectedFilter={(item: FilterItem) => {
+              const newDepartments = selectedFilter.departments.some(
+                (selected) => selected.id === item.id
+              )
+                ? []
+                : [item];
 
-          if (newDepartments.length === 0) {
-            setFieldValue("department_id", ""); 
-          } else {
-            setFieldValue("department_id", item.id); 
-          }
-        }}
-        onClose={() => setIsShown(0)}
-        filterType="departments"
-        width="384px"
-        height="150px"
-        showButton={false}
-        itemsheight="100px"
-      />
+              setSelectedFilter((prev) => ({
+                ...prev,
+                departments: newDepartments,
+              }));
+
+              if (newDepartments.length === 0) {
+                setFieldValue("department_id", "");
+              } else {
+                setFieldValue("department_id", item.id);
+              }
+            }}
+            onClose={() => setIsShown(0)}
+            filterType="departments"
+            width="384px"
+            height="150px"
+            showButton={false}
+            itemsheight="100px"
+          />
         )}
       </div>
       <div className="w-full mt-[65px] flex items-center gap-[22px] justify-end">
@@ -257,7 +258,12 @@ export default function EmployeeForm({ setShowAddEmployee }: AddemployeeProps) {
         >
           გაუქმება
         </button>
-        <button type="button" className="w-[263px] h-[42px] bg-[#8338EC] rounded-[5px] text-[18px] text-white font-firago font-normal cursor-pointer">
+        <button
+          type="button"
+          className={`w-[263px] h-[42px] bg-[#8338EC] rounded-[5px] text-[18px] text-white font-firago font-normal cursor-pointer${
+            hasErrors ? "opacity-50 cursor-not-allowed" : ""
+          }`}
+        >
           დაამატე თანამშრომელი
         </button>
       </div>

@@ -34,8 +34,6 @@ export default function SelecSection() {
     }
   }, []);
 
-
-  //როუტზე გადასვლისას რო წაიშალოს 
   useEffect(() => {
     if (pathname !== "/") {
       sessionStorage.removeItem("selectedFilters");
@@ -46,15 +44,29 @@ export default function SelecSection() {
       });
     }
   }, [pathname]);
-  //წაშლაა 
-  const handleRemoveFilter = (item: FilterItem, filterType: keyof FilterTypes) => {
-  setSelectedFilter((prev) => ({
-    ...prev,
-    [filterType]: prev[filterType].filter((selected) => selected.id !== item.id),
-  }));
-};
 
+  const handleRemoveFilter = (
+    item: FilterItem,
+    filterType: keyof FilterTypes
+  ) => {
+    const updatedFilter = {
+      ...selectedFilter,
+      [filterType]: selectedFilter[filterType].filter(
+        (selected) => selected.id !== item.id
+      ),
+    };
+    setSelectedFilter(updatedFilter);
+    sessionStorage.setItem("selectedFilters", JSON.stringify(updatedFilter));
+  };
 
+  const handleClearSessionStorage = () => {
+    sessionStorage.clear(); 
+    setSelectedFilter({
+      departments: [],
+      priorities: [],
+      employees: [],
+    });
+  };
 
   return (
     <div className="relative">
@@ -114,7 +126,6 @@ export default function SelecSection() {
           />
         </div>
       </div>
-      {/* მოჩექილების გამოჩენა  */}
       {(selectedFilter.departments.length > 0 ||
         selectedFilter.employees.length > 0 ||
         selectedFilter.priorities.length > 0) && (
@@ -124,7 +135,9 @@ export default function SelecSection() {
               key={item.id}
               className="flex items-center gap-[8px] border-[1px] border-[#CED4DA] rounded-[43px] px-[10px] py-[6px]"
             >
-              <p className="text-[#343A40] text-[14px] font-firago font-normal">{item.name}</p>
+              <p className="text-[#343A40] text-[14px] font-firago font-normal">
+                {item.name}
+              </p>
               <IoClose
                 onClick={() => handleRemoveFilter(item, "departments")}
                 className="text-[#343A40] cursor-pointer"
@@ -136,7 +149,9 @@ export default function SelecSection() {
               key={item.id}
               className="flex items-center gap-[8px] border-[1px] border-[#CED4DA] rounded-[43px] px-[10px] py-[6px]"
             >
-              <p className="text-[#343A40] text-[14px] font-firago font-normal">{item.name}</p>
+              <p className="text-[#343A40] text-[14px] font-firago font-normal">
+                {item.name}
+              </p>
               <IoClose
                 onClick={() => handleRemoveFilter(item, "priorities")}
                 className="text-[#343A40] cursor-pointer"
@@ -157,6 +172,15 @@ export default function SelecSection() {
               />
             </div>
           ))}
+          <div className="flex items-center gap-[8px] border-[1px] border-[#CED4DA] rounded-[43px] px-[10px] py-[6px]">
+            <p className="text-[#343A40] text-[14px] font-firago font-normal">
+              გასუფთავება
+            </p>
+            <IoClose
+              onClick={handleClearSessionStorage}
+              className="text-[#343A40] cursor-pointer"
+            />
+          </div>
         </div>
       )}
       {isShown === 1 && (
@@ -165,13 +189,18 @@ export default function SelecSection() {
           setSelectedFilter={(item: FilterItem) =>
             setSelectedFilter((prev) => ({
               ...prev,
-              departments: prev.departments.some((selected) => selected.id === item.id)
+              departments: prev.departments.some(
+                (selected) => selected.id === item.id
+              )
                 ? prev.departments.filter((selected) => selected.id !== item.id)
                 : [...prev.departments, item],
             }))
           }
           onClose={() => {
-            sessionStorage.setItem("selectedFilters", JSON.stringify(selectedFilter));
+            sessionStorage.setItem(
+              "selectedFilters",
+              JSON.stringify(selectedFilter)
+            );
             setIsShown(0);
           }}
           filterType="departments"
@@ -186,13 +215,18 @@ export default function SelecSection() {
           setSelectedFilter={(item: FilterItem) =>
             setSelectedFilter((prev) => ({
               ...prev,
-              priorities: prev.priorities.some((selected) => selected.id === item.id)
+              priorities: prev.priorities.some(
+                (selected) => selected.id === item.id
+              )
                 ? prev.priorities.filter((selected) => selected.id !== item.id)
                 : [...prev.priorities, item],
             }))
           }
           onClose={() => {
-            sessionStorage.setItem("selectedFilters", JSON.stringify(selectedFilter));
+            sessionStorage.setItem(
+              "selectedFilters",
+              JSON.stringify(selectedFilter)
+            );
             setIsShown(0);
           }}
           filterType="priorities"
@@ -207,13 +241,18 @@ export default function SelecSection() {
           setSelectedFilter={(item: FilterItem) =>
             setSelectedFilter((prev) => ({
               ...prev,
-              employees: prev.employees.some((selected) => selected.id === item.id)
+              employees: prev.employees.some(
+                (selected) => selected.id === item.id
+              )
                 ? []
                 : [item],
             }))
           }
           onClose={() => {
-            sessionStorage.setItem("selectedFilters", JSON.stringify(selectedFilter));
+            sessionStorage.setItem(
+              "selectedFilters",
+              JSON.stringify(selectedFilter)
+            );
             setIsShown(0);
           }}
           filterType="employees"
