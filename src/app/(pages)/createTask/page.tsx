@@ -5,7 +5,6 @@ import { CreateTaskValidationSchema } from "@/app/utils/validation/createTaskVal
 import { useFormik } from "formik";
 import React, { useState } from "react";
 import Title from "./title/title";
-import axios from "axios";
 import Description from "./description/description";
 import Priority from "./priority/priority";
 import Status from "./status/status";
@@ -13,6 +12,7 @@ import Department from "./department/department";
 import Employee from "./employee/employee";
 import Addemployee from "@/app/components/header/addemployee";
 import Calendar from "./calendar/calendar";
+import { axiosInstance } from "@/app/lib/axiosInstance";
 
 const token = process.env.NEXT_PUBLIC_API_TOKEN;
 
@@ -43,13 +43,10 @@ export default function Page() {
         formData.append("employee_id", values.employee_id);
         formData.append("due_date", values.due_date);
 
-        const res = await axios.post(
-          "https://momentum.redberryinternship.ge/api/tasks",
+        const res = await axiosInstance.post("tasks",
           formData,
           {
             headers: {
-              Accept: "application/json",
-              "Content-Type": "multipart/form-data",
               Authorization: `Bearer ${token}`,
             },
           }
@@ -148,7 +145,6 @@ export default function Page() {
           <div className="flex justify-end">
             <button
               type="submit"
-              disabled={hasErrors}
               className={`w-[208px] h-[42px] bg-[#8338EC] rounded-[5px] text-[18px] font-firago font-normal text-white mt-[145px] ${
                 hasErrors ? "opacity-50 cursor-not-allowed" : ""
               }`}

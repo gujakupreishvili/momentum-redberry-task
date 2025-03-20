@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ['momentum.redberryinternship.ge'], 
+    domains: ['momentum.redberryinternship.ge', 'api.dicebear.com'],
   },
 };
 

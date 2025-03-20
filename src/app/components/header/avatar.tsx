@@ -1,12 +1,12 @@
 "use client";
 import Image from "next/image";
 import React, { useState } from "react";
-import { LuImagePlus } from "react-icons/lu";
 import { RiDeleteBin5Line } from "react-icons/ri";
+import uploadImg from "../../../../public/assets/Images/upload.svg"
 
 interface AvatarProps {
-  onChange: (file: File | null) => void; 
-  error?: string; 
+  onChange: (file: File | null) => void;
+  error?: string; // error არის optional
 }
 
 export default function Avatar({ onChange, error }: AvatarProps) {
@@ -32,19 +32,24 @@ export default function Avatar({ onChange, error }: AvatarProps) {
     };
     reader.readAsDataURL(file);
 
-    onChange(file); 
+    onChange(file);
   };
 
   const handleDeleteImage = () => {
     setImagePreview(null);
-    onChange(null); 
+    onChange(null);
   };
-  console.log(error,"avatar errror")
+
+  console.log(error, "avatar error");
 
   return (
     <div className="mt-[45px] w-full">
       <h1 className="text-[#343A40] font-firago font-medium pb-[8px]">ავატარი*</h1>
-      <div className={`border-dashed w-full h-[120px] border-[1px] ${error ? "border-red-500" : "border-[#CED4DA]"}  rounded-[8px] flex justify-center items-center`}>
+      <div
+        className={`border-dashed w-full h-[120px] border-[1px] ${
+          error ? "border-red-500" : "border-[#CED4DA]"
+        } rounded-[8px] flex justify-center items-center`}
+      >
         {imagePreview ? (
           <div className="w-[88px] h-[88px] rounded-[44px] flex justify-center items-center relative">
             <Image
@@ -63,8 +68,13 @@ export default function Avatar({ onChange, error }: AvatarProps) {
           </div>
         ) : (
           <label className="cursor-pointer flex flex-col items-center gap-2">
-            <LuImagePlus className={`${error ? "text-red-500" : "text-[#633CFF]"} text-[27px]`} />
-            <span className={`${error ? "text-red-500" : "text-[#633CFF]"} text-[14px]`}>ატვირთეთ სურათი</span>
+            {/* <LuImagePlus
+              className={`${error ? "text-red-500" : "text-[#633CFF]"} text-[27px]`}
+            /> */}
+            <Image src={uploadImg} alt="upload" />
+            <span className={`${error ? "text-red-500" : "text-[#343A40]"} text-[14px] font-firago font-normal`}>
+              ატვირთეთ სურათი
+            </span>
             <input
               type="file"
               accept="image/*"
