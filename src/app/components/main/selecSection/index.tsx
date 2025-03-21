@@ -36,7 +36,6 @@ export default function SelecSection() {
   
   const pathname = usePathname();
   const prevPathname = useRef<string | null>(null);
-  const isFirstRender = useRef(true);
   
   useEffect(() => {
     console.log("Current pathname:", pathname);
