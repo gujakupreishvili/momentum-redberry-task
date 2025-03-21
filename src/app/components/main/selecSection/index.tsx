@@ -36,7 +36,11 @@ export default function SelecSection() {
   
   const prevPathname = useRef<string | null>(null);
   useEffect(() => {
+    console.log("Current pathname:", pathname);
+    console.log("Previous pathname:", prevPathname.current);
+  
     if (prevPathname.current && pathname === "/") {
+      console.log("Removing selected filters");
       sessionStorage.removeItem("selectedFilters");
       setSelectedFilter({
         departments: [],
@@ -44,8 +48,10 @@ export default function SelecSection() {
         employees: [],
       });
     }
+  
     prevPathname.current = pathname;
   }, [pathname]);
+  
 
   const handleRemoveFilter = (
     item: FilterItem,
