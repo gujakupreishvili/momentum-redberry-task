@@ -1,9 +1,9 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect,  } from "react";
 import { IoIosArrowDown } from "react-icons/io";
 import FilterModal from "./departmentModal/filterModal";
 import { IoClose } from "react-icons/io5";
-import { usePathname } from "next/navigation";
+
 
 type FilterItem = {
   id: number;
@@ -34,26 +34,6 @@ export default function SelecSection() {
     }
   }, []);
   
-  const pathname = usePathname();
-  const prevPathname = useRef<string | null>(null);
-  
-  useEffect(() => {
-    console.log("Current pathname:", pathname);
-    console.log("Previous pathname:", prevPathname.current);
-
-    if (prevPathname.current && pathname === "/") {
-      console.log("Removing selected filters");
-      localStorage.removeItem("selectedFilters");
-      setSelectedFilter({
-        departments: [],
-        priorities: [],
-        employees: [],
-      });
-    }
-    prevPathname.current = pathname;
-  }, [pathname]);
-  
-
   const handleRemoveFilter = (
     item: FilterItem,
     filterType: keyof FilterTypes
