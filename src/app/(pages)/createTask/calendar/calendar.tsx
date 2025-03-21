@@ -5,7 +5,7 @@ interface CalendarProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   error?: string;
   touched?: boolean;
-  setFieldValue: (field: string, value: string) => void; 
+  setFieldValue: (field: string, value: string) => void;
 }
 
 export default function Calendar({
@@ -13,38 +13,40 @@ export default function Calendar({
   onChange,
   error,
   touched,
-  setFieldValue, 
+  setFieldValue,
 }: CalendarProps) {
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
   const formattedDate = tomorrow.toISOString().split("T")[0];
 
-  const [localValue, setLocalValue] = useState(value);
+  const [localValue, setLocalValue] = useState(value || formattedDate);
 
   useEffect(() => {
     const savedDate = localStorage.getItem("due_date");
     if (savedDate) {
-      setLocalValue(savedDate); 
+      setLocalValue(savedDate);
       setFieldValue("due_date", savedDate);
+    } else {
+      setLocalValue(formattedDate);
+      setFieldValue("due_date", formattedDate);
+      localStorage.setItem("due_date", formattedDate);
     }
-  }, [setFieldValue]);
+  }, [setFieldValue, formattedDate]);
 
   useEffect(() => {
     if (localValue) {
       localStorage.setItem("due_date", localValue);
-    } else {
-      localStorage.removeItem("due_date");
     }
   }, [localValue]);
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setLocalValue(newValue);
-    onChange(e); 
+    onChange(e);
   };
 
   return (
-    <div className="w-full flex flex-col ">
+    <div className="w-full flex flex-col">
       <label
         htmlFor="due_date"
         className="text-[#343A40] text-[16px] font-firago font-normal pb-[6px]"

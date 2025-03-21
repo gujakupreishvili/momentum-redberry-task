@@ -54,11 +54,31 @@ export default function GetAllTask({ task, title }: GetAllTaskProps) {
 
   const borderColor = statusColors[title.name];
 
-  const formattedDate = new Date(task.due_date).toLocaleDateString("ka-GE", {
+  const monthNames = {
+    Jan: "იან",
+    Feb: "თებ",
+    Mar: "მარ",
+    Apr: "აპრ",
+    May: "მაი",
+    Jun: "ივნ",
+    Jul: "ივლ",
+    Aug: "აგვ",
+    Sep: "სექ",
+    Oct: "ოქტ",
+    Nov: "ნოე",
+    Dec: "დეკ",
+  };
+  
+  const rawDate = new Date(task.due_date).toLocaleDateString("en-US", {
     day: "2-digit",
     month: "short",
     year: "numeric",
   });
+ 
+  const formattedDate = rawDate.replace(
+    /(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)/,
+    (match) => monthNames[match as keyof typeof monthNames] 
+  );
 
   return (
     <div

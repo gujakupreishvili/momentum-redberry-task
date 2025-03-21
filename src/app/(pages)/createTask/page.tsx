@@ -43,14 +43,11 @@ export default function Page() {
         formData.append("employee_id", values.employee_id);
         formData.append("due_date", values.due_date);
 
-        const res = await axiosInstance.post("tasks",
-          formData,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const res = await axiosInstance.post("tasks", formData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         console.log("Task created:", res.data);
         resetForm();
@@ -80,8 +77,9 @@ export default function Page() {
     setFieldTouched,
   } = formik;
 
-  const hasErrors = Object.keys(errors).length > 0 || Object.keys(touched).length === 0;
-  console.log(values.status_id,"status id")
+  const hasErrors =
+    Object.keys(errors).length > 0 || Object.keys(touched).length === 0;
+  console.log(values.status_id, "status id");
 
   return (
     <>
@@ -113,10 +111,7 @@ export default function Page() {
               setFieldValue={setFieldValue}
               error={errors.priority_id}
             />
-            <Status
-              setFieldValue={setFieldValue}
-              error={errors.status_id}
-            />
+            <Status setFieldValue={setFieldValue} error={errors.status_id} />
           </div>
         </div>
         <div className="flex flex-col w-full pr-[313px]">
@@ -145,8 +140,11 @@ export default function Page() {
           <div className="flex justify-end">
             <button
               type="submit"
-              className={`w-[208px] h-[42px] bg-[#8338EC] rounded-[5px] text-[18px] font-firago font-normal text-white mt-[145px] ${
-                hasErrors ? "opacity-50 cursor-not-allowed" : ""
+              disabled={hasErrors}
+              className={`w-[208px] h-[42px] bg-[#8338EC]  transition-[1.3s] rounded-[5px] text-[18px] font-firago font-normal text-white mt-[145px] ${
+                hasErrors
+                  ? "opacity-50 cursor-not-allowed"
+                  : "hover:bg-[#B588F4] cursor-pointer"
               }`}
             >
               დავალების შექმნა

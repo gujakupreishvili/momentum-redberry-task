@@ -173,7 +173,7 @@ export default function FilterModal({
       </div>
       {showButton && (
         <button
-          className="absolute right-[30px] bottom-[20px] w-[155px] h-[35px] rounded-[20px] bg-[#8338EC] text-white font-firago text-[16px] z-40"
+          className="absolute right-[30px] bottom-[20px] w-[155px] h-[35px] rounded-[20px] bg-[#8338EC] cursor-pointer hover:bg-[#B588F4] text-white font-firago text-[16px] z-40"
           onClick={handleCloseModal}
         >
           არჩევა

@@ -2,11 +2,10 @@
 import Image from "next/image";
 import React, { useState } from "react";
 import { RiDeleteBin5Line } from "react-icons/ri";
-import uploadImg from "../../../../public/assets/Images/upload.svg"
 
 interface AvatarProps {
   onChange: (file: File | null) => void;
-  error?: string; // error არის optional
+  error?: string;
 }
 
 export default function Avatar({ onChange, error }: AvatarProps) {
@@ -15,21 +14,13 @@ export default function Avatar({ onChange, error }: AvatarProps) {
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
 
-    if (!file) {
-      return;
-    }
-
-    if (!file.type.startsWith("image/")) {
-      return;
-    }
-    if (file.size > 600 * 1024) {
+    if (!file || !file.type.startsWith("image/") || file.size > 600 * 1024) {
+      alert("გთხოვთ ატვირთოთ სურათი (მაქსიმუმ 600KB).");
       return;
     }
 
     const reader = new FileReader();
-    reader.onload = () => {
-      setImagePreview(reader.result as string);
-    };
+    reader.onload = () => setImagePreview(reader.result as string);
     reader.readAsDataURL(file);
 
     onChange(file);
@@ -39,8 +30,6 @@ export default function Avatar({ onChange, error }: AvatarProps) {
     setImagePreview(null);
     onChange(null);
   };
-
-  console.log(error, "avatar error");
 
   return (
     <div className="mt-[45px] w-full">
@@ -53,11 +42,14 @@ export default function Avatar({ onChange, error }: AvatarProps) {
         {imagePreview ? (
           <div className="w-[88px] h-[88px] rounded-[44px] flex justify-center items-center relative">
             <Image
-              width={88}
-              height={88}
+              width={20}
+              height={20}
               src={imagePreview}
               alt="avatar"
               className="w-full h-full object-cover rounded-[44px]"
+              onError={(e) => {
+                e.currentTarget.src = "/assets/Images/fallback-image.png";
+              }}
             />
             <div
               onClick={handleDeleteImage}
@@ -68,10 +60,7 @@ export default function Avatar({ onChange, error }: AvatarProps) {
           </div>
         ) : (
           <label className="cursor-pointer flex flex-col items-center gap-2">
-            {/* <LuImagePlus
-              className={`${error ? "text-red-500" : "text-[#633CFF]"} text-[27px]`}
-            /> */}
-            <Image src={uploadImg} alt="upload" />
+            <img src="/assets/Images/upload.svg" alt="upload" width={40} height={40} />
             <span className={`${error ? "text-red-500" : "text-[#343A40]"} text-[14px] font-firago font-normal`}>
               ატვირთეთ სურათი
             </span>
@@ -84,6 +73,7 @@ export default function Avatar({ onChange, error }: AvatarProps) {
           </label>
         )}
       </div>
+      {error && <p className="text-red-500 text-[12px] mt-2">{error}</p>}
     </div>
   );
 }

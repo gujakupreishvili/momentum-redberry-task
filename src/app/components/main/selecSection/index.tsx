@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { IoIosArrowDown } from "react-icons/io";
 import FilterModal from "./departmentModal/filterModal";
 import { IoClose } from "react-icons/io5";
@@ -33,9 +33,10 @@ export default function SelecSection() {
       setSelectedFilter(JSON.parse(savedFilters));
     }
   }, []);
-
+  
+  const prevPathname = useRef<string | null>(null);
   useEffect(() => {
-    if (pathname !== "/") {
+    if (prevPathname.current && pathname === "/") {
       sessionStorage.removeItem("selectedFilters");
       setSelectedFilter({
         departments: [],
@@ -43,6 +44,7 @@ export default function SelecSection() {
         employees: [],
       });
     }
+    prevPathname.current = pathname;
   }, [pathname]);
 
   const handleRemoveFilter = (
