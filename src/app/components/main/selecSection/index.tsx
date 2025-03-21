@@ -1,9 +1,8 @@
 "use client";
-import React, { useState, useEffect,  } from "react";
+import React, { useState, useEffect } from "react";
 import { IoIosArrowDown } from "react-icons/io";
 import FilterModal from "./departmentModal/filterModal";
 import { IoClose } from "react-icons/io5";
-
 
 type FilterItem = {
   id: number;
@@ -25,15 +24,20 @@ export default function SelecSection() {
     employees: [],
   });
 
-  
-  
   useEffect(() => {
-    const savedFilters = localStorage.getItem("selectedFilters");
+    const savedFilters = sessionStorage.getItem("selectedFilters");
     if (savedFilters) {
       setSelectedFilter(JSON.parse(savedFilters));
+    } else {
+      // If sessionStorage is empty, reset selectedFilter to initial state
+      setSelectedFilter({
+        departments: [],
+        priorities: [],
+        employees: [],
+      });
     }
   }, []);
-  
+
   const handleRemoveFilter = (
     item: FilterItem,
     filterType: keyof FilterTypes
@@ -45,11 +49,11 @@ export default function SelecSection() {
       ),
     };
     setSelectedFilter(updatedFilter);
-    localStorage.setItem("selectedFilters", JSON.stringify(updatedFilter));
+    sessionStorage.setItem("selectedFilters", JSON.stringify(updatedFilter));
   };
 
   const handleClearlocalStorage = () => {
-    localStorage.clear(); 
+    sessionStorage.removeItem("selectedFilters");
     setSelectedFilter({
       departments: [],
       priorities: [],
@@ -186,7 +190,7 @@ export default function SelecSection() {
             }))
           }
           onClose={() => {
-            localStorage.setItem(
+            sessionStorage.setItem(
               "selectedFilters",
               JSON.stringify(selectedFilter)
             );
@@ -212,7 +216,7 @@ export default function SelecSection() {
             }))
           }
           onClose={() => {
-            localStorage.setItem(
+            sessionStorage.setItem(
               "selectedFilters",
               JSON.stringify(selectedFilter)
             );
@@ -238,7 +242,7 @@ export default function SelecSection() {
             }))
           }
           onClose={() => {
-            localStorage.setItem(
+            sessionStorage.setItem(
               "selectedFilters",
               JSON.stringify(selectedFilter)
             );
