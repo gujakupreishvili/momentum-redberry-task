@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export const uselocalStorageFilters = (key: string) => {
+export const useLocalStorageFilters = (key: string) => {
   const [filterValues, setFilterValue] = useState<string | null>(null);
 
   useEffect(() => {
