@@ -25,8 +25,8 @@ export default function SelecSection() {
     employees: [],
   });
 
-  const pathname = usePathname();
-
+  
+  
   useEffect(() => {
     const savedFilters = sessionStorage.getItem("selectedFilters");
     if (savedFilters) {
@@ -34,11 +34,20 @@ export default function SelecSection() {
     }
   }, []);
   
+  const pathname = usePathname();
   const prevPathname = useRef<string | null>(null);
+  const isFirstRender = useRef(true);
+  
   useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      prevPathname.current = pathname;
+      return;
+    }
+  
     console.log("Current pathname:", pathname);
     console.log("Previous pathname:", prevPathname.current);
-  
+
     if (prevPathname.current && pathname === "/") {
       console.log("Removing selected filters");
       sessionStorage.removeItem("selectedFilters");
@@ -48,7 +57,6 @@ export default function SelecSection() {
         employees: [],
       });
     }
-  
     prevPathname.current = pathname;
   }, [pathname]);
   
