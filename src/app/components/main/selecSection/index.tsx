@@ -28,7 +28,7 @@ export default function SelecSection() {
   
   
   useEffect(() => {
-    const savedFilters = sessionStorage.getItem("selectedFilters");
+    const savedFilters = localStorage.getItem("selectedFilters");
     if (savedFilters) {
       setSelectedFilter(JSON.parse(savedFilters));
     }
@@ -50,7 +50,7 @@ export default function SelecSection() {
 
     if (prevPathname.current && pathname === "/") {
       console.log("Removing selected filters");
-      sessionStorage.removeItem("selectedFilters");
+      localStorage.removeItem("selectedFilters");
       setSelectedFilter({
         departments: [],
         priorities: [],
@@ -72,11 +72,11 @@ export default function SelecSection() {
       ),
     };
     setSelectedFilter(updatedFilter);
-    sessionStorage.setItem("selectedFilters", JSON.stringify(updatedFilter));
+    localStorage.setItem("selectedFilters", JSON.stringify(updatedFilter));
   };
 
-  const handleClearSessionStorage = () => {
-    sessionStorage.clear(); 
+  const handleClearlocalStorage = () => {
+    localStorage.clear(); 
     setSelectedFilter({
       departments: [],
       priorities: [],
@@ -193,7 +193,7 @@ export default function SelecSection() {
               გასუფთავება
             </p>
             <IoClose
-              onClick={handleClearSessionStorage}
+              onClick={handleClearlocalStorage}
               className="text-[#343A40] cursor-pointer"
             />
           </div>
@@ -213,7 +213,7 @@ export default function SelecSection() {
             }))
           }
           onClose={() => {
-            sessionStorage.setItem(
+            localStorage.setItem(
               "selectedFilters",
               JSON.stringify(selectedFilter)
             );
@@ -239,7 +239,7 @@ export default function SelecSection() {
             }))
           }
           onClose={() => {
-            sessionStorage.setItem(
+            localStorage.setItem(
               "selectedFilters",
               JSON.stringify(selectedFilter)
             );
@@ -265,7 +265,7 @@ export default function SelecSection() {
             }))
           }
           onClose={() => {
-            sessionStorage.setItem(
+            localStorage.setItem(
               "selectedFilters",
               JSON.stringify(selectedFilter)
             );

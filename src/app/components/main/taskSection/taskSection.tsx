@@ -2,10 +2,11 @@
 import React, { useEffect, useState } from "react";
 import Statuses from "../statuses/statuses";
 import GetAllTask from "../getAllTasks/getAllTask";
-import { useSessionStorageFilters } from "@/app/hooks/useSessionStorageFilters";
+
 import { axiosInstance } from "@/app/lib/axiosInstance";
 import { useRouter } from "next/navigation";
 import { DotLoader } from "react-spinners";
+import { uselocalStorageFilters } from "@/app/hooks/useSessionStorageFilters";
 
 type StatusesItem = {
   id: number;
@@ -56,7 +57,7 @@ export default function TaskSection() {
   const [taskData, setTaskData] = useState<TasksProps[] | null>(null);
   const router = useRouter();
 
-  const filteredData = useSessionStorageFilters("selectedFilters");
+  const filteredData = uselocalStorageFilters("selectedFilters");
   
   const getStatuses = async () => {
     try {

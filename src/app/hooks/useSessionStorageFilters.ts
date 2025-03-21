@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 
-export const useSessionStorageFilters = (key: string) => {
+export const uselocalStorageFilters = (key: string) => {
   const [filterValues, setFilterValue] = useState<string | null>(null);
 
   useEffect(() => {
-    const getStoredValue = () => sessionStorage.getItem(key);
+    const getStoredValue = () => localStorage.getItem(key);
     setFilterValue(getStoredValue());
 
     const handleStorageChange = () => {
