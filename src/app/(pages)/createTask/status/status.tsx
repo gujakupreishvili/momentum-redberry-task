@@ -1,5 +1,5 @@
 "use client";
-import axios from "axios";
+import { axiosInstance } from "@/app/lib/axiosInstance";
 import React, { useEffect, useState } from "react";
 import { IoIosArrowDown } from "react-icons/io";
 
@@ -33,16 +33,14 @@ export default function Status({ setFieldValue, error }: StatusProps) {
 
   useEffect(() => {
     if (selectedStatus) {
-      setFieldValue("status_id", selectedStatus.id); // Set Formik value here
+      setFieldValue("status_id", selectedStatus.id); 
       localStorage.setItem("status", JSON.stringify(selectedStatus));
     }
   }, [selectedStatus, setFieldValue]);
 
   const getStatus = async () => {
     try {
-      const res = await axios.get<StatusItem[]>(
-        "https://momentum.redberryinternship.ge/api/statuses"
-      );
+      const res = await axiosInstance.get<StatusItem[]>("statuses");
       setData(res.data);
     } catch (error) {
       console.error("Error fetching statuses:", error);

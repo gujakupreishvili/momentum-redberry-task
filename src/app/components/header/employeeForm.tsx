@@ -1,12 +1,11 @@
+"use client";
 import React, { useState } from "react";
-import { FaCheck } from "react-icons/fa";
 import Avatar from "./avatar";
 import { IoIosArrowDown } from "react-icons/io";
 import FilterModal from "../main/selecSection/departmentModal/filterModal";
 import { useFormik } from "formik";
 import { EmployeeValidationSchema } from "@/app/utils/validation/employeeValidationSchema";
 import { axiosInstance } from "@/app/lib/axiosInstance";
-
 
 interface AddemployeeProps {
   setShowAddEmployee: (value: boolean) => void;
@@ -29,7 +28,9 @@ const initialValue = {
   avatar: null,
   department_id: "",
 };
+
 const token = process.env.NEXT_PUBLIC_API_TOKEN;
+
 export default function EmployeeForm({ setShowAddEmployee }: AddemployeeProps) {
   const [isShown, setIsShown] = useState<number>(0);
   const [selectedFilter, setSelectedFilter] = useState<FilterTypes>({
@@ -60,6 +61,7 @@ export default function EmployeeForm({ setShowAddEmployee }: AddemployeeProps) {
           },
         });
         console.log("Employee created:", res.data);
+        setShowAddEmployee(false); 
       } catch (error) {
         console.error("Error creating employee:", error);
       }
@@ -75,16 +77,13 @@ export default function EmployeeForm({ setShowAddEmployee }: AddemployeeProps) {
     errors,
     setFieldValue,
   } = formik;
-  const hasErrors = Object.keys(errors).length;
-  
+  const hasErrors = Object.keys(errors).length > 0;
+
   return (
-    <form action="" className="w-full" onSubmit={handleSubmit}>
-      <div className="flex w-full justify-between ">
+    <form onSubmit={handleSubmit} className="w-full">
+      <div className="flex w-full justify-between">
         <div className="flex flex-col">
-          <label
-            htmlFor=""
-            className="text-[14px] text-[#343A40] font-medium font-firago pb-[3px]"
-          >
+          <label className="text-[14px] text-[#343A40] font-medium font-firago pb-[3px]">
             სახელი*
           </label>
           <input
@@ -93,58 +92,18 @@ export default function EmployeeForm({ setShowAddEmployee }: AddemployeeProps) {
             value={values.name}
             name="name"
             type="text"
-            className={` ${
-              errors.name ? "border-red-500" : " border-[#CED4DA]"
-            } w-[384px] h-[42px] border-[1px]  rounded-[6px] px-[10px]`}
+            className={`w-[384px] h-[42px] border-[1px] rounded-[6px] px-[10px] ${
+              errors.name ? "border-red-500" : "border-[#CED4DA]"
+            }`}
           />
-          <p className="text-[10px] text-red-500 mt-[4px] font-firago font-medium">
-            {errors.name ===
-              "გთხოვთ, გამოიყენოთ მხოლოდ ლათინური ან ქართული სიმბოლოები" &&
-              "გთხოვთ, გამოიყენოთ მხოლოდ ლათინური ან ქართული სიმბოლოები"}
-          </p>
-          <div className="flex items-center mt-[10px] gap-[5px]">
-            <FaCheck
-              className={`text-[12px] ${
-                errors.name === "name must be at least 2 characters"
-                  ? "text-red-500"
-                  : "text-[#6C757D]"
-              } `}
-            />
-            <p
-              className={`${
-                errors.name === "name must be at least 2 characters"
-                  ? "text-red-500"
-                  : "text-[#6C757D]"
-              }  text-[10px] font-firago font-light`}
-            >
-              მინიმუმ 2 სიმბოლო
+          {errors.name && (
+            <p className="text-red-500 text-[10px] mt-[4px] font-firago font-medium">
+              {errors.name}
             </p>
-          </div>
-          <div className="flex items-center mt-[5px] gap-[5px]">
-            <FaCheck
-              className={`text-[12px] ${
-                errors.name === " name must be at most 255 characters"
-                  ? "text-red-500"
-                  : "text-[#6C757D]"
-              } `}
-            />
-            <p
-              className={`${
-                errors.name === " name must be at most 255 characters"
-                  ? "text-red-500"
-                  : "text-[#6C757D]"
-              }  text-[10px] font-firago font-light`}
-            >
-              მაქსიმუმ 255 სიმბოლო
-            </p>
-          </div>
+          )}
         </div>
         <div className="flex flex-col">
-          <label
-            htmlFor=""
-            className="text-[14px] text-[#343A40] font-medium font-firago pb-[3px]"
-          >
-            {" "}
+          <label className="text-[14px] text-[#343A40] font-medium font-firago pb-[3px]">
             გვარი*
           </label>
           <input
@@ -153,51 +112,15 @@ export default function EmployeeForm({ setShowAddEmployee }: AddemployeeProps) {
             value={values.surname}
             name="surname"
             type="text"
-            className={` ${
-              errors.surname ? "border-red-500" : " border-[#CED4DA]"
-            } w-[384px] h-[42px] border-[1px]  rounded-[6px] px-[10px]`}
+            className={`w-[384px] h-[42px] border-[1px] rounded-[6px] px-[10px] ${
+              errors.surname ? "border-red-500" : "border-[#CED4DA]"
+            }`}
           />
-          <p className="text-[10px] text-red-500 mt-[4px] font-firago font-medium">
-            {errors.surname ===
-              "გთხოვთ, გამოიყენოთ მხოლოდ ლათინური ან ქართული სიმბოლოები" &&
-              "გთხოვთ, გამოიყენოთ მხოლოდ ლათინური ან ქართული სიმბოლოები"}
-          </p>
-          <div className="flex  items-center mt-[10px] gap-[5px]">
-            <FaCheck
-              className={`text-[12px] ${
-                errors.surname === "surname must be at least 2 characters"
-                  ? "text-red-500"
-                  : "text-[#6C757D]"
-              } `}
-            />
-            <p
-              className={`${
-                errors.surname === "surname must be at least 2 characters"
-                  ? "text-red-500"
-                  : "text-[#6C757D]"
-              }  text-[10px] font-firago font-light`}
-            >
-              მინიმუმ 2 სიმბოლო
+          {errors.surname && (
+            <p className="text-red-500 text-[10px] mt-[4px] font-firago font-medium">
+              {errors.surname}
             </p>
-          </div>
-          <div className="flex items-center mt-[5px] gap-[5px]">
-            <FaCheck
-              className={`text-[12px] ${
-                errors.surname === "surname must be at most 255 characters"
-                  ? "text-red-500"
-                  : "text-[#6C757D]"
-              } `}
-            />
-            <p
-              className={`${
-                errors.surname === "surname must be at most 255 characters"
-                  ? "text-red-500"
-                  : "text-[#6C757D] "
-              } text-[10px] font-firago font-light`}
-            >
-              მაქსიმუმ 255 სიმბოლო
-            </p>
-          </div>
+          )}
         </div>
       </div>
       <Avatar
@@ -209,12 +132,12 @@ export default function EmployeeForm({ setShowAddEmployee }: AddemployeeProps) {
           დეპარტამენტი*
         </p>
         <div
-          className={`${
-            errors.department_id ? "border-red-500" : "border-[#CED4DA] "
-          } w-[384px] h-[42px] border-[1px]  rounded-[6px] flex items-center justify-between px-[14px] cursor-pointer`}
+          className={`w-[384px] h-[42px] border-[1px] rounded-[6px] flex items-center justify-between px-[14px] cursor-pointer ${
+            errors.department_id ? "border-red-500" : "border-[#CED4DA]"
+          }`}
           onClick={handleIsShow}
         >
-          <p>{selectedFilter.departments[0]?.name}</p>
+          <p>{selectedFilter.departments[0]?.name }</p>
           <IoIosArrowDown
             className={`${isShown === 1 && "rotate-180"} ${
               errors.department_id ? "text-red-500" : "text-[#343A40]"
@@ -259,10 +182,11 @@ export default function EmployeeForm({ setShowAddEmployee }: AddemployeeProps) {
           გაუქმება
         </button>
         <button
-          type="button"
-          className={`w-[263px] h-[42px] bg-[#8338EC] rounded-[5px] text-[18px] text-white font-firago font-normal cursor-pointer${
-            hasErrors ? "opacity-50 cursor-not-allowed" : ""
+          type="submit"
+          className={`w-[263px] h-[42px] bg-[#8338EC]  rounded-[5px] text-[18px] text-white font-firago font-normal  ${
+            hasErrors ? "opacity-50 cursor-not-allowed" : "hover:bg-[#B588F4] cursor-pointer"
           }`}
+          disabled={hasErrors}
         >
           დაამატე თანამშრომელი
         </button>

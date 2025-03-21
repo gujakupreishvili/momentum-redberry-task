@@ -7,6 +7,7 @@ import statusImg from "../../../../../../public/assets/Images/status.png";
 import Image from 'next/image';
 import { DotLoader } from 'react-spinners';
 import { axiosInstance } from '@/app/lib/axiosInstance';
+import ChangeStatus from '../changeStatus/changeStatus';
 
 type TasksProps = {
   id: number;
@@ -147,16 +148,17 @@ export default function TaskDetails() {
         <h3 className="text-[#2A2A2A] text-[24px] font-firago font-semibold mt-[73px]">
           დავალების დეტალები
         </h3>
-        <div className="flex items-center gap-[70px] mt-[20px] h-[24px]">
+        <div className="flex items-center gap-[70px] mt-[20px] h-[70px] ">
           <div className="flex items-center gap-[6px] w-[164px]">
             <Image src={statusImg} alt="status" className="w-[24px] h-[24px]" />
             <p className="text-[16px] text-[#474747] font-firago font-normal">
               სტატუსი
             </p>
           </div>
-          <h1>{taskData.status.name}</h1>
+          {/* <h1>{taskData.status.name}</h1> */}
+          <ChangeStatus />
         </div>
-        <div className="flex items-center gap-[70px] mt-[20px] h-[24px]">
+        <div className="flex items-center gap-[70px] h-[70px]">
           <div className="flex items-center gap-[6px] w-[164px]">
             <Image
               width={20}
@@ -189,7 +191,7 @@ export default function TaskDetails() {
             </div>
           </div>
         </div>
-        <div className="flex items-center gap-[70px] mt-[20px] h-[24px]">
+        <div className="flex items-center gap-[70px]  h-[70px]">
           <div className="flex items-center gap-[6px]">
             <Image
               src={calendarImg}
