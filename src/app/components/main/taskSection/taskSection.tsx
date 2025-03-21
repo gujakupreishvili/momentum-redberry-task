@@ -91,7 +91,7 @@ export default function TaskSection() {
   }
 
   const handleTaskClick = (taskId: number) => {
-     localStorage.removeItem("selectedFilters")
+    sessionStorage.removeItem("selectedFilters")
     router.push(`/getTask/${taskId}`); 
   };
   return (

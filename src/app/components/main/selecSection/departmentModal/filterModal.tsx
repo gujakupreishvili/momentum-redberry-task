@@ -81,7 +81,7 @@ export default function FilterModal({
       alert("გთხოვთ, აირჩიოთ მინიმუმ ერთი ელემენტი!");
       return;
     }
-    localStorage.setItem("selectedFilters", JSON.stringify(selectedFilter));
+    sessionStorage.setItem("selectedFilters", JSON.stringify(selectedFilter));
     onClose();
   };
 

@@ -4,7 +4,7 @@ export const useLocalStorageFilters = (key: string) => {
   const [filterValues, setFilterValue] = useState<string | null>(null);
 
   useEffect(() => {
-    const getStoredValue = () => localStorage.getItem(key);
+    const getStoredValue = () => sessionStorage.getItem(key);
     setFilterValue(getStoredValue());
 
     const handleStorageChange = () => {
